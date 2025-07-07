@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <title>CEO's Personal Assistant</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #chat-box { border: 1px solid #ccc; padding: 10px; height: 400px; overflow-y: scroll; }
+        #input-box { width: 100%; padding: 10px; margin-top: 10px; }
+        button { padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>CEO's Personal Assistant</h1>
+    <div id="chat-box"></div>
+    <input type="text" id="input-box" placeholder="Enter your request...">
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        async function sendMessage() {
+            const input = document.getElementById('input-box').value;
+            const chatBox = document.getElementById('chat-box');
+            chatBox.innerHTML += `<p><strong>You:</strong> ${input}</p>`;
+            
+            const response = await fetch('/', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: `message=${encodeURIComponent(input)}`
+            });
+            const data = await response.json();
+            chatBox.innerHTML += `<p><strong>Assistant:</strong> ${data.response}</p>`;
+            document.getElementById('input-box').value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
+</body>
+</html>
